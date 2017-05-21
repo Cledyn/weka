@@ -1,0 +1,14 @@
+@relation empty
+
+@attribute 'status pozyczki' {splacona,splacona_cz,windykacja,odmowa,windykacja_sp}
+@attribute 'rodzaj zrodla dochodu' numeric
+@attribute 'miesieczny dochod netto' numeric
+@attribute 'ktore rolowanie' numeric
+@attribute 'kwota kredytu' numeric
+@attribute wiek numeric
+@attribute plec {K,M}
+@attribute 'okres w jakim pobieral dochod' numeric
+@attribute 'okres w jakim bedzie pobieral dochod' numeric
+@attribute 'opoznienie splaty' numeric
+
+@data
