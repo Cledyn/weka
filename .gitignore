@@ -4,9 +4,10 @@
 # Log file
 *.log
 
-@IntelliJ files
+#IntelliJ files
 *.idea
 *.iml
+target
 
 
 # BlueJ files
