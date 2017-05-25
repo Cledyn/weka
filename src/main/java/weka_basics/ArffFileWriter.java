@@ -9,11 +9,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 
-public class ArtffFileWriter {
+public class ArffFileWriter {
 
     public static void writeDataToFile(Instances toSave, String newFileName) throws IOException, URISyntaxException {
 
-        URL resourcesDir = ArtffFileWriter.class.getResource("/");
+        URL resourcesDir = ArffFileWriter.class.getResource("/");
         String newFilePath = Paths.get(resourcesDir.toURI()) + "/" + newFileName;
         ArffSaver saver = new ArffSaver();
         saver.setInstances(toSave);

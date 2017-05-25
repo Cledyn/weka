@@ -1,7 +1,7 @@
 package weka_basics.operations;
 
-import weka_basics.ArtffFileReader;
-import weka_basics.ArtffFileWriter;
+import weka_basics.ArffFileReader;
+import weka_basics.ArffFileWriter;
 import weka_basics.predicate.DenyRejectedLoansPredicate;
 import weka_basics.predicate.DenyTooHighLoanPredicate;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class WekaManager {
     private Instances data;
 
     public static WekaManager create(String filePath) throws Exception {
-        Instances data = ArtffFileReader.getDataFromFile(filePath);
+        Instances data = ArffFileReader.getDataFromFile(filePath);
         return new WekaManager(data);
     }
 
@@ -38,19 +38,19 @@ public class WekaManager {
     }
 
     private Instances removeRejectedLoans() throws Exception {
-        Instances empty = ArtffFileReader.createEmpty();
+        Instances empty = ArffFileReader.createEmpty();
         data.stream().filter(new DenyRejectedLoansPredicate(0, "odmowa")).forEach(empty::add);
         return empty;
     }
 
     private Instances removeLoansGreaterThan(double maxAcceptableLoan) throws Exception {
-        Instances empty = ArtffFileReader.createEmpty();
+        Instances empty = ArffFileReader.createEmpty();
         data.stream().filter(new DenyTooHighLoanPredicate(maxAcceptableLoan, LOAN_VALUE_INDEX)).forEach(empty::add);
         return empty;
     }
 
     private Instances getProperData(double maxLoanValue) throws Exception {
-        Instances empty = ArtffFileReader.createEmpty();
+        Instances empty = ArffFileReader.createEmpty();
         data.stream().filter(k -> !"odmowa".equals(k.stringValue(0)) && maxLoanValue >= k.value(4)).forEach(empty::add);
         //instances bez odmów i z maks kwotą pożyczki 900 zł
         return removeRecordsByAttrIndex(LOAN_STATUS_INDEX, empty);
@@ -73,15 +73,15 @@ public class WekaManager {
     public static void main(String[] args) throws Exception {
         WekaManager mng = create(null);
         Instances removedRejectedLoans = mng.removeRejectedLoans();
-        ArtffFileWriter.writeDataToFile(removedRejectedLoans, "removed_rejected_loans_v2.arff");
+        ArffFileWriter.writeDataToFile(removedRejectedLoans, "removed_rejected_loans_v2.arff");
 
         Instances loansLowerThan900 = mng.removeLoansGreaterThan(5, "900.0");
-        ArtffFileWriter.writeDataToFile(loansLowerThan900, "loans_lower_than_900_v2.arff");
+        ArffFileWriter.writeDataToFile(loansLowerThan900, "loans_lower_than_900_v2.arff");
 
         Instances dataWithoutStatus = mng.removeRecordsByAttrIndex(LOAN_STATUS_INDEX, mng.data);
-        ArtffFileWriter.writeDataToFile(dataWithoutStatus, "data_without_status_v2.arff");
+        ArffFileWriter.writeDataToFile(dataWithoutStatus, "data_without_status_v2.arff");
 
         Instances loansLowerThan900AndOnlyAccepted = mng.getProperData(900);
-        ArtffFileWriter.writeDataToFile(loansLowerThan900AndOnlyAccepted, "merged_v2.arff");
+        ArffFileWriter.writeDataToFile(loansLowerThan900AndOnlyAccepted, "merged_v2.arff");
     }
 }
